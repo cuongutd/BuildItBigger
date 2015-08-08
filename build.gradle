@@ -28,3 +28,22 @@ project(":cloudbackend"){
 }
 
 
+//task testLocalServer1 {
+//    doFirst {
+//        tasks.findByPath(":cloudbackend:assemble").execute()
+//        tasks.findByPath(":cloudbackend:appengineDownloadSdk").execute()
+//        tasks.findByPath(":cloudbackend:appengineRun").execute()
+//        tasks.findByPath(":app:connectedAndroidTestFreeLocaltest").execute()
+//    }
+//    doLast {
+//        tasks.findByPath(":cloudbackend:appengineStop").execute()
+//    }
+//}
+
+
+task testLocalServer {
+    dependsOn ':cloudbackend:appengineRun'
+    mustRunAfter ':cloudbackend:appengineRun'
+    dependsOn ':app:connectedAndroidTestFreeLocaltest'
+    finalizedBy ':cloudbackend:appengineStop'
+}

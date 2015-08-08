@@ -1,10 +1,11 @@
 apply plugin: 'com.android.application'
 
 android {
+    testBuildType "localtest"
     compileSdkVersion 22
     buildToolsVersion "22.0.1"
     defaultConfig {
-        applicationId "com.udacity.gradle.builditbigger"
+        applicationId "com.cuong.gradle.builditbigger"
         minSdkVersion 10
         targetSdkVersion 22
         versionCode 1
@@ -27,11 +28,11 @@ android {
     }
     productFlavors {
         free {
-            applicationId 'com.udacity.gradle.builditbigger.free'
+            applicationId 'com.cuong.gradle.builditbigger.free'
         }
         paid {
             minSdkVersion 10
-            applicationId 'com.udacity.gradle.builditbigger.paid'
+            applicationId 'com.cuong.gradle.builditbigger.paid'
             targetSdkVersion 22
             versionCode 1
             versionName '1.0'
@@ -44,24 +45,24 @@ dependencies {
     // Added for AdMob
     compile project(':jokeandroidlib')
     compile 'com.android.support:appcompat-v7:22.2.0'
-    compile 'com.google.android.gms:play-services:7.5.0'
+    freeCompile 'com.google.android.gms:play-services:7.5.0'
     compile project(path: ':cloudbackend', configuration: 'android-endpoints')
     compile project(':jokejavalib')
 }
 
 
-task startEngineAndTest () {
-
-    android {
-        testBuildType "localtest"
-    }
-    doFirst{
-        tasks.findByPath(":cloudbackend:assemble").execute()
-        tasks.findByPath(":cloudbackend:appengineDownloadSdk").execute()
-        tasks.findByPath(":cloudbackend:appengineRun").execute()
-        tasks.findByPath(":app:connectedAndroidTestFreeLocaltest").execute()
-    }
-    doLast {
-        tasks.findByPath(":cloudbackend:appengineStop").execute()
-    }
-}
+//task startEngineAndTest () {
+//
+//    android {
+//        testBuildType "localtest"
+//    }
+//    doFirst{
+//        tasks.findByPath(":cloudbackend:assemble").execute()
+//        tasks.findByPath(":cloudbackend:appengineDownloadSdk").execute()
+//        tasks.findByPath(":cloudbackend:appengineRun").execute()
+//        tasks.findByPath(":app:connectedAndroidTestFreeLocaltest").execute()
+//    }
+//    doLast {
+//        tasks.findByPath(":cloudbackend:appengineStop").execute()
+//    }
+//}
