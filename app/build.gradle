@@ -1,0 +1,67 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 22
+    buildToolsVersion "22.0.1"
+    defaultConfig {
+        applicationId "com.udacity.gradle.builditbigger"
+        minSdkVersion 10
+        targetSdkVersion 22
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        localtest {
+            debuggable true
+            jniDebuggable false
+            signingConfig android.signingConfigs.debug
+            renderscriptDebuggable false
+            renderscriptOptimLevel 3
+            minifyEnabled false
+            zipAlignEnabled true
+        }
+    }
+    productFlavors {
+        free {
+            applicationId 'com.udacity.gradle.builditbigger.free'
+        }
+        paid {
+            minSdkVersion 10
+            applicationId 'com.udacity.gradle.builditbigger.paid'
+            targetSdkVersion 22
+            versionCode 1
+            versionName '1.0'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    // Added for AdMob
+    compile project(':jokeandroidlib')
+    compile 'com.android.support:appcompat-v7:22.2.0'
+    compile 'com.google.android.gms:play-services:7.5.0'
+    compile project(path: ':cloudbackend', configuration: 'android-endpoints')
+    compile project(':jokejavalib')
+}
+
+
+task startEngineAndTest () {
+
+    android {
+        testBuildType "localtest"
+    }
+    doFirst{
+        tasks.findByPath(":cloudbackend:assemble").execute()
+        tasks.findByPath(":cloudbackend:appengineDownloadSdk").execute()
+        tasks.findByPath(":cloudbackend:appengineRun").execute()
+        tasks.findByPath(":app:connectedAndroidTestFreeLocaltest").execute()
+    }
+    doLast {
+        tasks.findByPath(":cloudbackend:appengineStop").execute()
+    }
+}
